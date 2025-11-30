@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Random Image from Directory</title>
+  <style>
+    :root{font-family:helvetica,'Helvetica Neue',sans-serif;}
+    body{display:flex;align-items:center;justify-content:center;min-height:100vh;background:#f3f4f6;margin:0;padding:2rem}
+    .card{background:white;box-shadow:0 6px 18px rgba(0,0,0,.08);border-radius:12px;padding:1rem;max-width:900px;width:100%;text-align:center}
+    img{max-width:100%;height:auto;border-radius:8px;margin-bottom:.5rem}
+    .controls{display:flex;gap:.5rem;justify-content:center;margin-top:.5rem}
+    button{padding:.5rem .8rem;border-radius:8px;border:1px solid #ddd;background:#fff;cursor:pointer}
+    button:active{transform:translateY(1px)}
+    .small{font-size:.9rem;color:#555}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Random image from <code>/img/</code></h2>
+    <div id="imageWrap">
+      <img id="randomImg" src="" alt="Random image" loading="lazy">
+    </div>
+    <div class="controls">
+      <button id="newBtn">Show another</button>
+      <button id="downloadBtn">Download</button>
+    </div>
+    <p class="small">This page will try to fetch <code>images.json</code> (an array of filenames). If that file isn't present it falls back to a hardcoded list — edit the <code>imagesList</code> in the script with your filenames, or generate <code>images.json</code> server-side.</p>
+  </div>
+
+  <script>
+    // CONFIG: path to the directory holding your images (relative to this HTML file)
+    const IMAGES_DIR = './img/';
+
+    // Attempt to fetch images.json from the server. If not available, we'll use the fallback list below.
+    // images.json should be a JSON array like: ["pic1.jpg","pic2.png","photo-03.webp"]
+
+    // FALLBACK: edit this array with your filenames if you don't want to produce images.json server-side.
+    const fallbackImages = [
+      'pic01.gif',
+      'pic02.gif',
+      'pic03.gif',
+      'pic04.gif'
+    ];
+
+    const imgEl = document.getElementById('randomImg');
+    const newBtn = document.getElementById('newBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+
+    // Choose a random element from an array
+    function choice(arr){
+      return arr[Math.floor(Math.random()*arr.length)];
+    }
+
+    // Set the image src and alt; simple cache-busting option commented out
+    function showRandom(images){
+      if(!images || images.length === 0){
+        imgEl.alt = 'No images found';
+        imgEl.src = '';
+        return;
+      }
+      const filename = choice(images);
+      imgEl.src = IMAGES_DIR + filename; // + '?_=' + Date.now(); // uncomment to avoid browser cache if you update images frequently
+      imgEl.alt = filename;
+      downloadBtn.disabled = false;
+      downloadBtn.setAttribute('data-src', imgEl.src);
+    }
+
+    // Try to fetch images.json from the same folder (or server root) — adjust the path if needed
+    async function loadImages(){
+      try{
+        const resp = await fetch('images.json', {cache: 'no-store'});
+        if(!resp.ok) throw new Error('images.json not found');
+        const data = await resp.json();
+        if(!Array.isArray(data) || data.length === 0) throw new Error('images.json invalid');
+        return data;
+      }catch(e){
+        // fallback to the hardcoded array
+        console.warn('Failed to load images.json — using fallback list. Error:', e.message);
+        return fallbackImages;
+      }
+    }
+
+    // Wire up buttons
+    newBtn.addEventListener('click', async ()=>{
+      if(!window._images) window._images = await loadImages();
+      showRandom(window._images);
+    });
+
+    downloadBtn.addEventListener('click', ()=>{
+      const src = downloadBtn.getAttribute('data-src');
+      if(!src) return;
+      // Create an anchor to download the current image
+      const a = document.createElement('a');
+      a.href = src;
+      // Use the filename from the src for the download attribute
+      a.download = src.split('/').pop().split('?')[0];
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    });
+
+    // Initialize on load
+    (async function init(){
+      window._images = await loadImages();
+      showRandom(window._images);
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JS Random</title>
+    <style>
+      body {
+        font-family: Helvetica, sans-serif;
+        margin: 2rem;
+        background-color: #f0f0f0;
+      }
+      h1 {
+        color: #000;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>JS Random</h1>
+    <h2>The Math object</h2>
+    <p>JavaScript has a built-in Math object that allows one to perform mathematical tasks or functions. One of its functions is Math.random(), which returns a floating-point, pseudo-random number in the range 0 to less than 1.</p>
+    <p>We can use Math.random() to create random behavior in our code, such as selecting random items from an array, generating random numbers within a specific range, or simulating random events. <a href="https://www.w3schools.com/js/js_math.asp" target="_blank">Read more.</a></p>
+    <h2>JavaScript Random Examples</h2>
+    <p>Return a random integer between 0 and 9 (both included):</p>
+    <pre><code>
+      1.  //floor rounded down to its nearest integer
+      2.  document.getElementById("randomNumber").innerHTML = Math.floor(Math.random() * 100);
+    </code></pre>
+    <button onclick="document.getElementById('randomNumber').innerHTML=Math.floor(Math.random() * 100)">
+      Generate Random Number 0-100
+    </button>
+    <p id="randomNumber"></p>
+
+    <hr />
+
+    <pre>
+      <code>
+1.  const fruits = ['apple', 'banana', 'cherry', 'peach', 'elderberry'];
+2.  const randomIndex = Math.floor(Math.random() * fruits.length);
+3.  const randomFruit = fruits[randomIndex];
+4.  console.log(randomFruit); // Outputs a random fruit from the array
+
+5.  function getRandomFruit() {
+6.      var randomIndex = Math.floor(Math.random() * fruits.length);
+7.      return fruits[randomIndex];
+8.  }
+
+11.  // Print to console
+12. console.log("Random fruit from function:", getRandomFruit());
+      </code>
+    </pre>
+
+    <script src="randomFromArray.js"></script>
+    <button onclick="document.getElementById('randomArray').innerHTML=randomFruit">
+      Generate Fruit Static (using randomFruit const, line 4)
+    </button>
+    <p id="randomArray"></p>
+    <button onclick="document.getElementById('randomFruit').innerHTML=getRandomFruit()">
+      Generate Fruit from Function  (using getRandomFruit, lines 5-8)
+    </button>
+    <p id="randomFruit"></p>
+    
+    <hr />
+    <p>See more examples:</p>
+    <ul>
+      <li><a href="randomDice.html">Random Dice Roll</a></li>
+      <li><a href="randomImage.html">Random Image from Directory</a></li>
+      <li><a href="randomPassWord.html">Random Password Generator</a></li>
+    </ul>
+  </body>
+</html>
