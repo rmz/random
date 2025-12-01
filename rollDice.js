@@ -17,10 +17,8 @@ function rollDice() {
         values.push(value);
         // Create an array of image and have an alt string backup in case image doesn't load
         images.push(`<img src="img/${value}.png" alt="Dice ${value}">`);
-        //sum += value;
     }
 
     diceResult.textContent = `dice: ${values.join(", ")}`;
-    //diceTotal.textContent = `total: ${sum}`;
     diceImages.innerHTML = images.join(" ");
 }
