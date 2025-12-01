@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Background Image</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100vw; /* Ensure body takes full viewport height */
+            height: 100vh;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Welcome!</h1>
+    <p>This page has a random background image on each load.</p>
+
+    <script>
+        const backgroundImages = [
+          'img/pic01.gif',
+          'img/pic02.gif',
+          'img/pic03.gif',
+          'img/pic04.gif'
+        ];
+
+        function setRandomBackground() {
+            const randomIndex = Math.floor(Math.random() * backgroundImages.length);
+            const randomImage = backgroundImages[randomIndex];
+
+            // A background image is like a wallpaper for the web page or any block element
+            document.body.style.backgroundImage = `url('${randomImage}')`;
+            document.body.style.backgroundSize = '50%'; //use 'cover' to cover entire background
+            document.body.style.backgroundRepeat = 'no-repeat';
+            document.body.style.backgroundPosition = 'center';
+        }
+
+        // Call the function when the DOM content is loaded
+        document.addEventListener('DOMContentLoaded', setRandomBackground);
+    </script>
+</body>
+</html>
