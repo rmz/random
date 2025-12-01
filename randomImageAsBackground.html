@@ -22,6 +22,7 @@
     <p>This page has a random background image on each load.</p>
 
     <script>
+        // Array of image paths
         const backgroundImages = [
           'img/pic01.gif',
           'img/pic02.gif',
@@ -30,9 +31,12 @@
         ];
 
         function setRandomBackground() {
+            // Create a random index to select an image
             const randomIndex = Math.floor(Math.random() * backgroundImages.length);
+            // Select the random image
             const randomImage = backgroundImages[randomIndex];
 
+            // Apply the background image to the body element
             // A background image is like a wallpaper for the web page or any block element
             document.body.style.backgroundImage = `url('${randomImage}')`;
             document.body.style.backgroundSize = '50%'; //use 'cover' to cover entire background
