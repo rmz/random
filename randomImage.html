@@ -25,18 +25,15 @@
       <button id="newBtn">Show another</button>
       <button id="downloadBtn">Download</button>
     </div>
-    <p class="small">This page will try to fetch <code>images.json</code> (an array of filenames). If that file isn't present it falls back to a hardcoded list — edit the <code>imagesList</code> in the script with your filenames, or generate <code>images.json</code> server-side.</p>
+    <p class="small">This page will fetch a random image from an array of images.</p>
   </div>
 
   <script>
-    // CONFIG: path to the directory holding your images (relative to this HTML file)
+    // Path to the directory holding your images (relative to this HTML file)
     const IMAGES_DIR = './img/';
 
-    // Attempt to fetch images.json from the server. If not available, we'll use the fallback list below.
-    // images.json should be a JSON array like: ["pic1.jpg","pic2.png","photo-03.webp"]
-
-    // FALLBACK: edit this array with your filenames if you don't want to produce images.json server-side.
-    const fallbackImages = [
+    // Edit this array with your filenames 
+    const imageList = [
       'pic01.gif',
       'pic02.gif',
       'pic03.gif',
@@ -60,7 +57,7 @@
         return;
       }
       const filename = choice(images);
-      imgEl.src = IMAGES_DIR + filename; // + '?_=' + Date.now(); // uncomment to avoid browser cache if you update images frequently
+      imgEl.src = IMAGES_DIR + filename;
       imgEl.alt = filename;
       downloadBtn.disabled = false;
       downloadBtn.setAttribute('data-src', imgEl.src);
@@ -68,18 +65,8 @@
 
     // Try to fetch images.json from the same folder (or server root) — adjust the path if needed
     async function loadImages(){
-      try{
-        const resp = await fetch('images.json', {cache: 'no-store'});
-        if(!resp.ok) throw new Error('images.json not found');
-        const data = await resp.json();
-        if(!Array.isArray(data) || data.length === 0) throw new Error('images.json invalid');
-        return data;
-      }catch(e){
-        // fallback to the hardcoded array
-        console.warn('Failed to load images.json — using fallback list. Error:', e.message);
-        return fallbackImages;
+        return imageList;
       }
-    }
 
     // Wire up buttons
     newBtn.addEventListener('click', async ()=>{
